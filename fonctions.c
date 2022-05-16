@@ -10,6 +10,18 @@ typedef struct {
 }Piece
 
 void show(char** grille){
+	int i,l;
+	char a;
+	for (a='A';a<='J';a++){ 
+		printf(" %c", a);
+	}
+	printf("\n");
+	for(i=0;i<TAILLE;i++){
+		for (l=0;l<TAILLE;l++){
+			printf("|%c", grille[i][l]);
+		}
+		printf("|\n");
+	}
 }
 
 void createPiece(Piece* pieces, int** sizes){
