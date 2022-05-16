@@ -5,12 +5,6 @@
 #define TAILLE 10
 #define NB_PIECES 7
 
-typedef struct {
-	char** form;
-	int nb_orient;
-	int size[2];
-}Piece
-
 void show(char** grille){
 	int i,l;
 	char a;
@@ -28,13 +22,17 @@ void show(char** grille){
 
 void createPiece(Piece* pieces){
 	int** sizes = malloc(7*sizeof(int*));
-	sizes[0]={1,4};
-	sizes[1]={2,2};
+	sizes[0][0]=1;
+	sizes[0][1]=4;
+	sizes[1][0]=2;
+	sizes[1][1]=2;
 	for (int i=2;i<=7;i++){
-		sizes[i]={2,3};
+		sizes[i][0]=2;
+		sizes[i][1]=3;
 	}
 	for (int i=0;i<NB_PIECES;i++){
-		pieces[i].size=sizes[i];
+		pieces[i].size[0]=sizes[i][0];
+		pieces[i].size[1]=sizes[i][1];
 		pieces[i].form=malloc(sizes[i][0]*sizeof(char*));
 		for (int j=0;j<sizes[i][0];j++){
 			pieces[i].form[j]=malloc(sizes[i][1]*sizeof(int));
@@ -112,6 +110,54 @@ void remove_line(char** grille){
 }
 
 void completeLigne(char** grille, int line[TAILLE]){
+}
+
+int collisions(char** grille, Piece piece, int column, int orient){
+	int i=0,j=0;
+	int startline=0,startcolumn=0;
+	int endline=piece.size[0],endcolumn=piece.size[1];
+	int incre=1;
+	if (orient==2){
+		endline=piece.size[1];
+		endcolumn=piece.size[0];
+	}
+	else if (orient==3) {
+		startline=piece.size[1]-1;
+		startcolumn=piece.size[0]-1;
+		endline=-1;
+		endcolumn=-1;
+		incre=-1;
+	}else if (orient==4) {
+		startline=piece.size[0]-1;
+		startcolumn=piece.size[1]-1;
+		endline=-1;
+		endcolumn=-1;
+		incre=-1;
+	}if (orient==1){
+		for (int k=0;k<piece.size[1];k++){
+			for (int p=0;p<piece.size[0];p++){
+				if (grille[p][k+column]=='@'&& piece.form[p][k]=='@'){
+					return 1;
+				}
+			}
+		}
+		int touche=0;
+		while (i<10 && touche==0){
+			for (j=0;j<piece.size[1];j++){
+				if (grille[i+1][j+column]=='@' && piece.form[i-1][j]=='@'){
+					touche=1;
+				}
+			}
+			i++;
+		}
+		for (int m=0;m<piece.size[0];m++){
+			for (int n=0;n<piece.size[1];n++){
+				grille[i-m-1][column+n]='@';
+			}
+		}
+	}
+	return 0;
+	
 }
 
 void game(){
