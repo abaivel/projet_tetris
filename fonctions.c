@@ -37,13 +37,13 @@ void createPiece(Piece* pieces, int** sizes){
 	pieces[4].form[1][2]='@';
 	for (int i=0;i<3;i++){
 		if (pieces[2].form[1][i]!='@'){
-			pieces[2].form[1][i]=' '
+			pieces[2].form[1][i]=' ';
 		}
 		if (pieces[3].form[1][i]!='@'){
-			pieces[3].form[1][i]=' '
+			pieces[3].form[1][i]=' ';
 		}
 		if (pieces[4].form[1][i]!='@'){
-			pieces[4].form[1][i]=' '
+			pieces[4].form[1][i]=' ';
 		}
 	}
 	for (int i=0;i<2;i++){
