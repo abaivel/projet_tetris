@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include "fonctions.c"
 
 int main(){
-    printf("Hello World !");
+    
     return 0;
 }
