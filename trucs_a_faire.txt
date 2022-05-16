@@ -1,0 +1,15 @@
+- affichage de la grille
+- gestion des colisions
+- gestion d'élimination des lignes
+- stockage des pièces et du nombre d'orientation qu'ont chacune des pièces
+- choix aléatoire des pièces
+- demande à l'utilisateur la colonne et l'orientation de la pièce, en gérant les erreurs (colonne ou orientation, qui n'existe pas, pièce qui ne rentre pas)
+- gérer le temps de jeu
+- sauvegarde du nom et du score du joueur
+- récupérer tous les scores et afficher les meilleurs
+- gestion de la fin du jeu, quand une pièce dépasse du plateau (par le haut)
+
+Bonus : 
+- rajouter des couleurs
+- rajouter des modes de difficultés
+- diminuer progressivement le temps limite de réponse du joueur
