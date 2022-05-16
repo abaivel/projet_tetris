@@ -3,6 +3,5 @@
 #include "fonctions.c"
 
 int main(){
-    
     return 0;
 }
