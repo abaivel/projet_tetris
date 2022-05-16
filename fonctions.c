@@ -111,6 +111,9 @@ char getChar()
 void remove_line(char** grille){
 }
 
+void completeLigne(char** grille, int line[TAILLE]){
+}
+
 void game(){
 //je sais pas encore quoi mettre là dedans
 }
