@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include "fonctions.h"
+#define TAILLE 10
 #define NB_PIECES 7
 
 typedef struct {
 	char** form;
 	int nb_orient;
+	int size[2];
 }Piece
 
 void show(char** grille){
@@ -24,8 +26,15 @@ void show(char** grille){
 	}
 }
 
-void createPiece(Piece* pieces, int** sizes){
+void createPiece(Piece* pieces){
+	int** sizes = malloc(7*sizeof(int*));
+	sizes[0]={1,4};
+	sizes[1]={2,2};
+	for (int i=2;i<=7;i++){
+		sizes[i]={2,3};
+	}
 	for (int i=0;i<NB_PIECES;i++){
+		pieces[i].size=sizes[i];
 		pieces[i].form=malloc(sizes[i][0]*sizeof(char*));
 		for (int j=0;j<sizes[i][0];j++){
 			pieces[i].form[j]=malloc(sizes[i][1]*sizeof(int));
@@ -97,6 +106,9 @@ char getChar()
 	c = getc(stdin);
     while (getc(stdin) != '\n' && getc(stdin) != EOF);
     return c;
+}
+
+void remove_line(char** grille){
 }
 
 void game(){
