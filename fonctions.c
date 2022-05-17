@@ -156,22 +156,41 @@ int completeLigne(char** grille, int line[TAILLE]){
 }
 
 int collisions(char** grille, Piece piece, int column, int orient){
-	int i=3,j=0;
+	int i,j=0;
 	Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
 	switch (orient)
 	{
 	    case 1: //forme de base
-	        piece_orient.form=piece.form;
+	        piece_orient.form=malloc(piece.sizeLC[0]*sizeof(char*));
+            if (piece_orient.form==NULL){
+                exit(1);
+            }
+            for (int l=0;l<piece.sizeLC[0];l++){
+                piece_orient.form[l]=malloc(piece.sizeLC[1]*sizeof(char));
+                if (piece_orient.form[l]==NULL){
+                    exit(1);
+                }
+                for (int t=0;t<piece.sizeLC[1];t++){
+                    piece_orient.form[l][t]=piece.form[l][t];
+                }
+            }
             piece_orient.sizeLC[0]=piece.sizeLC[0];
             piece_orient.sizeLC[1]=piece.sizeLC[1];
             //piece_orient=piece vu que la pièce n'est pas tourné
             break;
 	    case 2://forme tourné vers la droite de 90°
             piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
+            if (piece_orient.form==NULL){
+                exit(1);
+            }
             for (int l=0;l<piece.sizeLC[1];l++){
                 piece_orient.form[l]=malloc(piece.sizeLC[0]*sizeof(char));
-                for (int t=0;t<piece.sizeLC[0];t++){
-                    piece_orient.form[l][t]=piece.form[piece.sizeLC[0]-1-t][l];
+                if (piece_orient.form[l]==NULL){
+                    exit(1);
+                }
+                for (int t=piece.sizeLC[0]-1;t>=0;t--){
+                    printf("l=%d et t=%d\n",l,t);
+                    piece_orient.form[l][piece.sizeLC[0]-1-t]=piece.form[t][l];
                 }
             }
             piece_orient.sizeLC[0]=piece.sizeLC[1];
@@ -179,10 +198,18 @@ int collisions(char** grille, Piece piece, int column, int orient){
             break;
         case 3://forme tourné vers la droite de 180°
             piece_orient.form=malloc(piece.sizeLC[0]*sizeof(char*));
+            if (piece_orient.form==NULL){
+                exit(1);
+            }
             for (int l=piece.sizeLC[0]-1;l>=0;l--){
                 piece_orient.form[l]=malloc(piece.sizeLC[1]*sizeof(char));
+                if (piece_orient.form[l]==NULL){
+                    exit(1);
+                }
+            }
+            for (int l=piece.sizeLC[0]-1;l>=0;l--){
                 for (int t=piece.sizeLC[1]-1;t>=0;t--){
-                    piece_orient.form[l][t]=piece.form[piece.sizeLC[0]-1-l][piece.sizeLC[1]-1-t];
+                    piece_orient.form[piece.sizeLC[0]-1-l][piece.sizeLC[1]-1-t]=piece.form[l][t];
                 }
             }
             piece_orient.sizeLC[0]=piece.sizeLC[0];
@@ -192,8 +219,10 @@ int collisions(char** grille, Piece piece, int column, int orient){
             piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
             for (int l=piece.sizeLC[1]-1;l>=0;l--){
                 piece_orient.form[l]=malloc(piece.sizeLC[0]*sizeof(char));
-                for (int t=piece.sizeLC[0]-1;t>=0;t--){
-                    piece_orient.form[l][t]=piece.form[t][piece.sizeLC[1]-1-l];
+            }
+            for (int l=piece.sizeLC[1]-1;l>=0;l--){
+                for (int t=0;t<piece.sizeLC[0];t++){
+                    piece_orient.form[piece.sizeLC[1]-1-l][t]=piece.form[t][l];
                 }
             }
             piece_orient.sizeLC[0]=piece.sizeLC[1];
@@ -214,15 +243,20 @@ int collisions(char** grille, Piece piece, int column, int orient){
             }
         }
     }
+    i=piece_orient.sizeLC[0]-1;
     int touche=0;
-    while (i<9 && touche==0){ //Tant que la pièce n'est pas arrivée en bas de la grille et qu'elle peut encore descendre
-        for (j=0;j<piece_orient.sizeLC[1];j++){
-            if (grille[i+1][j+column]=='@' && (piece_orient.form[piece_orient.sizeLC[0]-1][j]=='@' || piece_orient.form[piece_orient.sizeLC[0]-2][j]=='@')){
-                touche=1;//La pièce ne peut plus descendre, il y a une pièce en dessous
+    while (i<TAILLE-piece_orient.sizeLC[0]+1 && touche==0){ //Tant que la pièce n'est pas arrivée en bas de la grille et qu'elle peut encore descendre
+        printf("i=%d\n",i);
+        for (int k=0;k<piece_orient.sizeLC[0];k++){
+            for (int j=0;j<piece_orient.sizeLC[1];j++){
+                if (grille[i+k][j+column]=='@' && piece_orient.form[k][j]=='@'){
+                    touche=1;
+                }
             }
         }
         i++;
     }
+    i-=touche;
     for (int m=0;m<piece_orient.sizeLC[0];m++){
         for (int n=0;n<piece_orient.sizeLC[1];n++){
             if (piece_orient.form[m][n]=='@'){
