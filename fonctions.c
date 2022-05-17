@@ -21,35 +21,49 @@ void show(char** grille){
 }
 
 void createPiece(Piece* pieces){
-	int** sizes = malloc(7*sizeof(int*));
+	int** sizes = malloc(NB_PIECES*sizeof(int*));//Va stocker les tailles des pièces
+	for (int i=0;i<NB_PIECES;i++){
+        sizes[i]=malloc(2*sizeof(int));
+	}
+	if (sizes==NULL){
+        exit(1);
+	}
 	sizes[0][0]=1;
 	sizes[0][1]=4;
 	sizes[1][0]=2;
 	sizes[1][1]=2;
-	for (int i=2;i<=7;i++){
+	for (int i=2;i<7;i++){
 		sizes[i][0]=2;
 		sizes[i][1]=3;
 	}
 	for (int i=0;i<NB_PIECES;i++){
-		pieces[i].size[0]=sizes[i][0];
-		pieces[i].size[1]=sizes[i][1];
+        //allouer la mémoire pour form
+		pieces[i].sizeLC[0]=sizes[i][0];
+		pieces[i].sizeLC[1]=sizes[i][1];
 		pieces[i].form=malloc(sizes[i][0]*sizeof(char*));
+		if (pieces[i].form==NULL){
+            exit(1);
+        }
 		for (int j=0;j<sizes[i][0];j++){
 			pieces[i].form[j]=malloc(sizes[i][1]*sizeof(int));
+            if (sizes==NULL){
+                exit(1);
+            }
 		}
 	}
 	for (int i=0;i<4;i++){
-		pieces[0].form[0][i]='@';
+		pieces[0].form[0][i]='@'; //piece 1, la barre
 	}
 	for (int i=0;i<2;i++){
 		for (int j=0;j<2;j++){
-			pieces[1].form[i][j]='@';
+			pieces[1].form[i][j]='@';//piece 2, le cube 2x2
 		}
 	}
 	for (int i=0;i<3;i++){
-		pieces[2].form[0][i]='@';
-		pieces[3].form[0][i]='@';
-		pieces[4].form[0][i]='@';
+		pieces[2].form[0][i]='@';//piece T
+		pieces[3].form[0][i]='@';//piece L
+		pieces[4].form[0][i]='@';//piece J
+        //Ces trois pièces ont une ligne complete
 	}
 	pieces[2].form[1][1]='@';
 	pieces[3].form[1][0]='@';
@@ -64,23 +78,25 @@ void createPiece(Piece* pieces){
 		if (pieces[4].form[1][i]!='@'){
 			pieces[4].form[1][i]=' ';
 		}
+		//Remplissage des cases sans @ par des " "
 	}
 	for (int i=0;i<2;i++){
 		for (int j=0;j<3;j++){
 			if (i==0 && j==2){
-				pieces[5].form[i][j]=' ';
+				pieces[5].form[i][j]=' ';//piece Z
 			}else if (i==1 && j==0){
 				pieces[5].form[i][j]=' ';
 			}else{
 				pieces[5].form[i][j]='@';
 			}
 			if (i==0 && j==0){
-				pieces[6].form[i][j]=' ';
+				pieces[6].form[i][j]=' ';//piece S
 			}else if (i==1 && j==2){
 				pieces[6].form[i][j]=' ';
 			}else{
 				pieces[6].form[i][j]='@';
 			}
+			//Tous ces if servent à faire les pieces Z et S
 		}
 	}
 	pieces[0].nb_orient=2;
@@ -90,6 +106,7 @@ void createPiece(Piece* pieces){
 	pieces[4].nb_orient=4;
 	pieces[5].nb_orient=2;
 	pieces[6].nb_orient=2;
+	//nb d'orientation de chaque pièce
 }
 
 void saveScore(int score, char pseudo[]){
