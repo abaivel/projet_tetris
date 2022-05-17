@@ -107,57 +107,111 @@ char getChar()
 }
 
 void remove_line(char** grille){
+    int line[TAILLE]={0};
+    int k=completeLigne(grille,line);
+    int y,p,t,n = 0;
+    for (y=0;y<k;y++){
+        for (p=0;p<TAILLE;p++){
+            grille[line[y]][p]=' ';
+        }
+        for (t=line[y]-1;t>=0;t--){
+            char* temp=grille[line[y]-(line[y]-1-t)];
+            grille[line[y]-(line[y]-1-t)]=grille[t];
+            grille[t]=temp;
+        }
+    }
 }
 
-void completeLigne(char** grille, int line[TAILLE]){
+int completeLigne(char** grille, int line[TAILLE]){
+    int i,j,k=0,s;
+    for (i=0;i<TAILLE;i++){
+        s=0;
+        for (j=0;j<TAILLE;j++){
+            if (grille[i][j]=='@'){
+                s++;
+            }
+        }if (s==TAILLE){
+            line[k]=i;
+            k++;
+        }
+    }return k;
 }
 
 int collisions(char** grille, Piece piece, int column, int orient){
-	int i=0,j=0;
+	int i=3,j=0;
 	int startline=0,startcolumn=0;
-	int endline=piece.size[0],endcolumn=piece.size[1];
+	int endline=piece.sizeLC[0],endcolumn=piece.sizeLC[1];
 	int incre=1;
+	Piece piece_orient;
 	if (orient==2){
-		endline=piece.size[1];
-		endcolumn=piece.size[0];
+        piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
+        for (int l=0;l<piece.sizeLC[1];l++){
+            piece_orient.form[l]=malloc(piece.sizeLC[0]*sizeof(char));
+            for (int t=0;t<piece.sizeLC[0];t++){
+                piece_orient.form[l][t]=piece.form[piece.sizeLC[0]-1-t][l];
+            }
+        }
+        piece_orient.sizeLC[0]=piece.sizeLC[1];
+        piece_orient.sizeLC[1]=piece.sizeLC[0];
 	}
 	else if (orient==3) {
-		startline=piece.size[1]-1;
-		startcolumn=piece.size[0]-1;
-		endline=-1;
-		endcolumn=-1;
-		incre=-1;
+	    piece_orient.form=malloc(piece.sizeLC[0]*sizeof(char*));
+        for (int l=piece.sizeLC[0]-1;l>=0;l--){
+            piece_orient.form[l]=malloc(piece.sizeLC[1]*sizeof(char));
+            for (int t=piece.sizeLC[1]-1;t>=0;t--){
+                piece_orient.form[l][t]=piece.form[piece.sizeLC[0]-1-l][piece.sizeLC[1]-1-t];
+            }
+        }
+        piece_orient.sizeLC[0]=piece.sizeLC[0];
+        piece_orient.sizeLC[1]=piece.sizeLC[1];
 	}else if (orient==4) {
-		startline=piece.size[0]-1;
-		startcolumn=piece.size[1]-1;
-		endline=-1;
-		endcolumn=-1;
-		incre=-1;
-	}if (orient==1){
-		for (int k=0;k<piece.size[1];k++){
-			for (int p=0;p<piece.size[0];p++){
-				if (grille[p][k+column]=='@'&& piece.form[p][k]=='@'){
-					return 1;
-				}
-			}
-		}
-		int touche=0;
-		while (i<10 && touche==0){
-			for (j=0;j<piece.size[1];j++){
-				if (grille[i+1][j+column]=='@' && piece.form[i-1][j]=='@'){
-					touche=1;
-				}
-			}
-			i++;
-		}
-		for (int m=0;m<piece.size[0];m++){
-			for (int n=0;n<piece.size[1];n++){
-				grille[i-m-1][column+n]='@';
-			}
-		}
+	    piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
+        for (int l=piece.sizeLC[1]-1;l>=0;l--){
+            piece_orient.form[l]=malloc(piece.sizeLC[0]*sizeof(char));
+            for (int t=piece.sizeLC[0]-1;t>=0;t--){
+                piece_orient.form[l][t]=piece.form[t][piece.sizeLC[1]-1-l];
+            }
+        }
+        piece_orient.sizeLC[0]=piece.sizeLC[1];
+        piece_orient.sizeLC[1]=piece.sizeLC[0];
+	}else{
+	    piece_orient.form=piece.form;
+	    piece_orient.sizeLC[0]=piece.sizeLC[0];
+        piece_orient.sizeLC[1]=piece.sizeLC[1];
 	}
+	showPiece(piece_orient);
+    for (int k=0;k<piece_orient.sizeLC[1];k++){
+        for (int p=0;p<piece_orient.sizeLC[0];p++){
+            if (grille[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
+                for (int r=0;r<piece_orient.sizeLC[0];r++){
+                    free(piece_orient.form[r]);
+                }
+                free(piece_orient.form);
+                return 1;
+            }
+        }
+    }
+    int touche=0;
+    while (i<9 && touche==0){
+        for (j=0;j<piece_orient.sizeLC[1];j++){
+            if (grille[i+1][j+column]=='@' && (piece_orient.form[piece_orient.sizeLC[0]-1][j]=='@' || piece_orient.form[piece_orient.sizeLC[0]-2][j]=='@')){
+                touche=1;
+            }
+        }
+        i++;
+    }
+    for (int m=0;m<piece_orient.sizeLC[0];m++){
+        for (int n=0;n<piece_orient.sizeLC[1];n++){
+            if (piece_orient.form[m][n]=='@'){
+                grille[i-(piece_orient.sizeLC[0]-m-1)][column+n]='@';
+            }
+        }
+    }
+    for (int r=0;r<piece_orient.sizeLC[0];r++){
+        free(piece_orient.form[r]);
+    }
+    free(piece_orient.form);
 	return 0;
-	
 }
 
 void game(){
