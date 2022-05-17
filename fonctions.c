@@ -5,6 +5,10 @@
 #define TAILLE 10
 #define NB_PIECES 7
 
+void title(){
+    printf("  _______   _        _     \n |__   __| | |      (_)    \n    | | ___| |_ _ __ _ ___ \n    | |/ _ \\ __| '__| / __|\n    | |  __/ |_| |  | \\__ \\ \n    |_|\\___|\\__|_|  |_|___/\n");
+}
+
 void show(char** grille){
 	int i,l;
 	char a;
