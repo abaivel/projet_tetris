@@ -179,7 +179,6 @@ int collisions(char** grille, Piece piece, int column, int orient){
 	    piece_orient.sizeLC[0]=piece.sizeLC[0];
         piece_orient.sizeLC[1]=piece.sizeLC[1];
 	}
-	showPiece(piece_orient);
     for (int k=0;k<piece_orient.sizeLC[1];k++){
         for (int p=0;p<piece_orient.sizeLC[0];p++){
             if (grille[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
