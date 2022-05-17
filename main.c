@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "fonctions.c"
 #include "fonctions.h"
 #define NB_PIECES 7
 #define TAILLE 10
