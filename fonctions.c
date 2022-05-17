@@ -129,11 +129,12 @@ void remove_line(char** grille){
     int y,p,t,n = 0;
     for (y=0;y<k;y++){
         for (p=0;p<TAILLE;p++){
-            grille[line[y]][p]=' ';
+            grille[line[y]][p]=' ';//vidage de la ligne
         }
         for (t=line[y]-1;t>=0;t--){
-            char* temp=grille[line[y]-(line[y]-1-t)];
-            grille[line[y]-(line[y]-1-t)]=grille[t];
+            //échange des lignes
+            char* temp=grille[t+1];
+            grille[t+1]=grille[t];
             grille[t]=temp;
         }
     }
