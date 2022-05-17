@@ -6,6 +6,7 @@ typedef struct {
 	int sizeLC[2];
 }Piece;
 
+void title();
 void show(char** grille);
 void createPiece(Piece* pieces);
 void saveScore(int score, char pseudo[]);
