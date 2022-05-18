@@ -116,7 +116,7 @@ void showPiece(Piece piece){
 	int i,j; 
 	for (i=0;i<=piece.sizeLC[0];i++)
 		for(j=0;j<=piece.sizeLC[1];i++)
-			printf("%c", piece.form)
+			printf("%c ", piece.form)
 		}
 	}
 }
