@@ -9,9 +9,6 @@ void title(){
     printf("  _______   _        _     \n |__   __| | |      (_)    \n    | | ___| |_ _ __ _ ___ \n    | |/ _ \\ __| '__| / __|\n    | |  __/ |_| |  | \\__ \\ \n    |_|\\___|\\__|_|  |_|___/\n");
 }
 
-void showPiece(Piece piece){
-}
-
 void show(char** grille){
 	int i,l;
 	char a;
@@ -115,22 +112,13 @@ void createPiece(Piece* pieces){
 	pieces[6].nb_orient=2;
 	//nb d'orientation de chaque pièce
 }
-void ShowPiece(Piece piece){
+void showPiece(Piece piece){
 	int i,j; 
 	for (i=0;i<=piece.sizeLC[0];i++)
 		for(j=0;j<=piece.sizeLC[1];i++)
 			printf("%c", piece.form)
 		}
 	}
-
-
-
-
-
-
-
-
-
 }
 void saveScore(int score, char pseudo[]){
 }
