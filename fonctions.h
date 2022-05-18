@@ -7,6 +7,7 @@ typedef struct {
 }Piece;
 
 void title();
+void showPiece(Piece piece);
 void show(char** grille);
 void createPiece(Piece* pieces);
 void saveScore(int score, char pseudo[]);
