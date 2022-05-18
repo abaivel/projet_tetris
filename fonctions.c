@@ -115,7 +115,23 @@ void createPiece(Piece* pieces){
 	pieces[6].nb_orient=2;
 	//nb d'orientation de chaque pièce
 }
+void ShowPiece(Piece piece){
+	int i,j; 
+	for (i=0;i<=piece.sizeLC[0];i++)
+		for(j=0;j<=piece.sizeLC[1];i++)
+			printf("%c", piece.form)
+		}
+	}
 
+
+
+
+
+
+
+
+
+}
 void saveScore(int score, char pseudo[]){
 }
 
