@@ -9,6 +9,7 @@ void title(){
     printf("  _______   _        _     \n |__   __| | |      (_)    \n    | | ___| |_ _ __ _ ___ \n    | |/ _ \\ __| '__| / __|\n    | |  __/ |_| |  | \\__ \\ \n    |_|\\___|\\__|_|  |_|___/\n");
 }
 
+
 void show(char** grille){
 	int i,l;
 	char a;
@@ -121,65 +122,36 @@ void ShowPiece(Piece piece){
 		printf("\n");
 	}
 }
+
+void OrientationPiece (Piece piece){
+	int i,j;
+	if (piece.nb_orient=1){
+		ShowPiece(piece);
+	}
+	else if (piece.nb_orient=2){
+		for 
+		
+		
+	
+			
+		
+		
+
 void saveScore(int score, char pseudo[]){
-    FILE* fichier = fopen("scores.txt","a");
-    if (fichier==NULL){
-        exit(1);
-    }
-    int i = fprintf(fichier, "%s %d\n",pseudo,score);
-    if (i==EOF){
-        exit(1);
-    }
-    fclose(fichier);
 }
 
-void recup_Scores(){
-    FILE* fichier = fopen("scores.txt","r");
-    int a=0,b=0,c=0,s;
-    int scoresMax[3]={0};
-    int i,j,nb=0;
-    char names[3][20];
-    char nom[20];
-    if (fichier==NULL){
-        exit(1);
-    }
-    do{
-        i = fscanf(fichier, "%s", nom);
-        j = fscanf(fichier, "%d", &s);
-        if (j!=EOF){
-            nb++;
-            if (s>=scoresMax[0] && s>=scoresMax[1] && s>=scoresMax[2]){
-                scoresMax[2]=scoresMax[1];
-                scoresMax[1]=scoresMax[0];
-                strcpy(names[2],names[1]);
-                strcpy(names[1],names[0]);
-                scoresMax[0]=s;
-                strcpy(names[0],nom);
-            }else if (s<scoresMax[0] && s>=scoresMax[1] && s>=scoresMax[2]){
-                scoresMax[2]=scoresMax[1];
-                strcpy(names[2],names[1]);
-                scoresMax[1]=s;
-                strcpy(names[1],nom);
-            }else if (s<scoresMax[0] && s<scoresMax[1] && s>=scoresMax[2]){
-                scoresMax[2]=s;
-                strcpy(names[2],nom);
-            }
-        }
-    }while (j!=EOF);
-    printf("Meilleurs scores :\n");
-    for (int i=0;i<nb && i<3;i++){
-        printf("%s %d\n",names[i],scoresMax[i]);
-    }
-    fclose(fichier);
+void recup_Score(){
 }
 
-char getChar(){
-    char c;
-    while (((c=getchar()) == '\n'));
+char getChar()
+{
+    int c = 0;
+	c = getc(stdin);
+    while (getc(stdin) != '\n' && getc(stdin) != EOF);
     return c;
 }
 
-int remove_line(char** grille){
+void remove_line(char** grille){
     int line[TAILLE]={0};
     int k=completeLigne(grille,line);
     int y,p,t,n = 0;
@@ -193,7 +165,7 @@ int remove_line(char** grille){
             grille[t+1]=grille[t];
             grille[t]=temp;
         }
-    }return k;
+    }
 }
 
 int completeLigne(char** grille, int line[TAILLE]){
@@ -211,8 +183,9 @@ int completeLigne(char** grille, int line[TAILLE]){
     }return k;
 }
 
-Piece create_orientPiece(Piece piece, int orient){
-    Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
+int collisions(char** grille, Piece piece, int column, int orient){
+	int i,j=0;
+	Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
 	switch (orient)
 	{
 	    case 1: //forme de base
@@ -244,6 +217,7 @@ Piece create_orientPiece(Piece piece, int orient){
                     exit(1);
                 }
                 for (int t=piece.sizeLC[0]-1;t>=0;t--){
+                    printf("l=%d et t=%d\n",l,t);
                     piece_orient.form[l][piece.sizeLC[0]-1-t]=piece.form[t][l];
                 }
             }
@@ -286,12 +260,6 @@ Piece create_orientPiece(Piece piece, int orient){
             printf("Erreur");
             exit(1);
 	}
-	return piece_orient;
-}
-
-int collisions(char** grille, Piece piece, int column, int orient){
-	int i=0,j=0;
-	Piece piece_orient=create_orientPiece(piece, orient);
     for (int k=0;k<piece_orient.sizeLC[1];k++){
         for (int p=0;p<piece_orient.sizeLC[0];p++){
             if (grille[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
@@ -303,8 +271,10 @@ int collisions(char** grille, Piece piece, int column, int orient){
             }
         }
     }
+    i=piece_orient.sizeLC[0]-1;
     int touche=0;
     while (i<TAILLE-piece_orient.sizeLC[0]+1 && touche==0){ //Tant que la pièce n'est pas arrivée en bas de la grille et qu'elle peut encore descendre
+        printf("i=%d\n",i);
         for (int k=0;k<piece_orient.sizeLC[0];k++){
             for (int j=0;j<piece_orient.sizeLC[1];j++){
                 if (grille[i+k][j+column]=='@' && piece_orient.form[k][j]=='@'){
@@ -314,14 +284,11 @@ int collisions(char** grille, Piece piece, int column, int orient){
         }
         i++;
     }
-    printf("touche=%d\n",touche);
     i-=touche;
-    //i+=piece_orient.sizeLC[0]-2;
     for (int m=0;m<piece_orient.sizeLC[0];m++){
         for (int n=0;n<piece_orient.sizeLC[1];n++){
             if (piece_orient.form[m][n]=='@'){
-                printf("i+m=%d\n",i+m);
-                grille[i+m-1][column+n]='@';//Placement de la pièce
+                grille[i-(piece_orient.sizeLC[0]-m-1)][column+n]='@';//Placement de la pièce
             }
         }
     }
@@ -330,6 +297,10 @@ int collisions(char** grille, Piece piece, int column, int orient){
     }
     free(piece_orient.form);
 	return 0;
+}
+
+void game(){
+//je sais pas encore quoi mettre là dedans
 }
 
 
