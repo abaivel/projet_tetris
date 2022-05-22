@@ -168,24 +168,8 @@ void remove_line(char** grille){
     }
 }
 
-int completeLigne(char** grille, int line[TAILLE]){
-    int i,j,k=0,s;
-    for (i=0;i<TAILLE;i++){
-        s=0;
-        for (j=0;j<TAILLE;j++){
-            if (grille[i][j]=='@'){
-                s++;
-            }
-        }if (s==TAILLE){
-            line[k]=i;
-            k++;
-        }
-    }return k;
-}
-
-int collisions(char** grille, Piece piece, int column, int orient){
-	int i,j=0;
-	Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
+Piece create_orientPiece(Piece piece, int orient){
+    Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
 	switch (orient)
 	{
 	    case 1: //forme de base
@@ -217,7 +201,6 @@ int collisions(char** grille, Piece piece, int column, int orient){
                     exit(1);
                 }
                 for (int t=piece.sizeLC[0]-1;t>=0;t--){
-                    printf("l=%d et t=%d\n",l,t);
                     piece_orient.form[l][piece.sizeLC[0]-1-t]=piece.form[t][l];
                 }
             }
@@ -260,6 +243,27 @@ int collisions(char** grille, Piece piece, int column, int orient){
             printf("Erreur");
             exit(1);
 	}
+	return piece_orient;
+}
+
+int completeLigne(char** grille, int line[TAILLE]){
+    int i,j,k=0,s;
+    for (i=0;i<TAILLE;i++){
+        s=0;
+        for (j=0;j<TAILLE;j++){
+            if (grille[i][j]=='@'){
+                s++;
+            }
+        }if (s==TAILLE){
+            line[k]=i;
+            k++;
+        }
+    }return k;
+}
+
+int collisions(char** grille, Piece piece, int column, int orient){
+	int i=0,j=0;
+	Piece piece_orient=create_orientPiece(piece, orient);
     for (int k=0;k<piece_orient.sizeLC[1];k++){
         for (int p=0;p<piece_orient.sizeLC[0];p++){
             if (grille[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
@@ -271,10 +275,8 @@ int collisions(char** grille, Piece piece, int column, int orient){
             }
         }
     }
-    i=piece_orient.sizeLC[0]-1;
     int touche=0;
     while (i<TAILLE-piece_orient.sizeLC[0]+1 && touche==0){ //Tant que la pièce n'est pas arrivée en bas de la grille et qu'elle peut encore descendre
-        printf("i=%d\n",i);
         for (int k=0;k<piece_orient.sizeLC[0];k++){
             for (int j=0;j<piece_orient.sizeLC[1];j++){
                 if (grille[i+k][j+column]=='@' && piece_orient.form[k][j]=='@'){
@@ -284,11 +286,14 @@ int collisions(char** grille, Piece piece, int column, int orient){
         }
         i++;
     }
+    printf("touche=%d\n",touche);
     i-=touche;
+    //i+=piece_orient.sizeLC[0]-2;
     for (int m=0;m<piece_orient.sizeLC[0];m++){
         for (int n=0;n<piece_orient.sizeLC[1];n++){
             if (piece_orient.form[m][n]=='@'){
-                grille[i-(piece_orient.sizeLC[0]-m-1)][column+n]='@';//Placement de la pièce
+                printf("i+m=%d\n",i+m);
+                grille[i+m-1][column+n]='@';//Placement de la pièce
             }
         }
     }
@@ -299,9 +304,6 @@ int collisions(char** grille, Piece piece, int column, int orient){
 	return 0;
 }
 
-void game(){
-//je sais pas encore quoi mettre là dedans
-}
 
 
 
