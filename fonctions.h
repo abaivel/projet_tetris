@@ -16,5 +16,5 @@ void recup_Score();
 char getChar();
 int remove_line(char** grille);
 int completeLigne(char** grille, int line[TAILLE]);
-int collisions(char** grille, Piece piece_orient, int column, int orient);
+int collisions(char** grille, Piece piece, int column, int orient);
 void game();
