@@ -116,7 +116,7 @@ void createPiece(Piece* pieces){
 void ShowPiece(Piece piece){
 	int i,j; 
 	for (i=0;i<piece.sizeLC[0];i++){
-		for(j=0;j<piece.sizeLC[1];i++){
+		for(j=0;j<piece.sizeLC[1];j++){
 			printf("%c ", piece.form[i][j]);
 		}
 		printf("\n");
