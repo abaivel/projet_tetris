@@ -25,6 +25,43 @@ int emptyLine(char** grille){
 	}return nb;
 }
 
+void showPieceOrient(Piece piece){
+	int m=piece.sizeLC[0];
+	if (piece.sizeLC[1]>m){
+		m=piece.sizeLC[1];
+	}
+	for (int t=0;t<piece.nb_orient;t++){
+		printf("%d",t+1);
+		for (int y=0;y<m+2+piece.sizeLC[(t+1)%2];y++){
+			printf(" ");
+		}
+	}
+	printf("\n");
+	for (int i=0;i<m;i++){
+		for (int p=0;p<piece.nb_orient;p++){
+			for (int j=0;j<piece.sizeLC[(p+1)%2];j++){
+				if (i<piece.sizeLC[(p)%2]){
+					if (p==0){
+						printf("%c ",piece.form[i][j]);
+					}else if (p==1){
+						printf("%c ",piece.form[piece.sizeLC[0]-1-j][i]);
+					}else if (p==2){
+						printf("%c ",piece.form[piece.sizeLC[0]-1-i][piece.sizeLC[1]-1-j]);
+					}else{
+						printf("%c ",piece.form[j][piece.sizeLC[1]-1-i]);
+					}
+				}else{
+					printf("  ");
+				}
+			}
+			printf("   ");
+			for (int h=0;h<m-piece.sizeLC[(p+1)%2];h++){
+				printf(" ");
+			}
+		}printf("\n");
+	}
+}
+
 void showPiece(Piece piece, int orient){
 	switch (orient)
 	{
