@@ -12,7 +12,7 @@ void show(char** grille);
 void createPiece(Piece* pieces);
 Piece create_orientPiece(Piece piece, int orient);
 void showPiece(Piece piece, int orient);
-showPieceOrient(Piece piece);
+void showPieceOrient(Piece piece);
 void saveScore(int score, char pseudo[]);
 void recup_Score();
 char getChar();
