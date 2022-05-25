@@ -7,10 +7,11 @@ typedef struct {
 }Piece;
 
 void title();
-void showPiece(Piece piece);
+//void showPiece(Piece piece);
 void show(char** grille);
 void createPiece(Piece* pieces);
 Piece create_orientPiece(Piece piece, int orient);
+void showPiece(Piece piece, int orient)
 void saveScore(int score, char pseudo[]);
 void recup_Score();
 char getChar();
