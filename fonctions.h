@@ -4,19 +4,20 @@ typedef struct {
 	char** form;
 	int nb_orient;
 	int sizeLC[2];
+	int color;
 }Piece;
 
 void title();
-//void showPiece(Piece piece);
-void show(char** grille);
-void createPiece(Piece* pieces);
+int emptyLine(char** grille);
+void show(char** grille, int** colors);
 Piece create_orientPiece(Piece piece, int orient);
+void createPiece(Piece* pieces);
+void saveScore(int score, char pseudo[]);
 void showPiece(Piece piece, int orient);
 void showPieceOrient(Piece piece);
-void saveScore(int score, char pseudo[]);
-void recup_Score();
+void showPieceOrien(Piece piece, int orient);
+void recup_Scores();
 char getChar();
 int remove_line(char** grille);
 int completeLigne(char** grille, int line[TAILLE]);
-int collisions(char** grille, Piece piece, int column, int orient);
-void game();
+int collisions(char** grille, int** colors, Piece piece, int column, int orient);
