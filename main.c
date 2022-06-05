@@ -75,6 +75,7 @@ int main(){
 		do{
 			printf("Choisir la colonne (c'est la partie gauche de la piece qui sera sur cette colonne) :\n");
 			column=getChar();
+			clear_scan();
 		}while(column<'A'||(orient%2==0 && column+chosen_piece.sizeLC[0]-1>'J')||(orient%2==1 && column+chosen_piece.sizeLC[1]-1>'J'));
 		time_t tv2 = time( NULL );
 		inter=difftime(tv2,tv);
