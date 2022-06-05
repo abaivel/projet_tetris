@@ -10,7 +10,7 @@ void title(){
 	printf("  _______   _        _     \n |__   __| | |      (_)    \n    | | ___| |_ _ __ _ ___ \n    | |/ _ \\ __| '__| / __|\n    | |  __/ |_| |  | \\__ \\ \n    |_|\\___|\\__|_|  |_|___/\n");
 }
 
-int howMuchTime(char** grille){
+float howMuchTime(char** grille){
 	int nb=0,a;
 	for (int i=0;i<TAILLE;i++){
 		a=0;
@@ -21,7 +21,7 @@ int howMuchTime(char** grille){
 		}if (a==TAILLE){
 			nb++;
 		}
-	}return nb;
+	}return nb*1.5; //Multiply by 1.5 to have more time
 }
 
 void showPieceOrient(Piece piece){
