@@ -8,3 +8,6 @@ fonctions.o: fonctions.c fonctions.h
 
 tetris: main.o fonctions.o
 	gcc fonctions.o main.o -o tetris
+	
+clean:
+	rm *.o
