@@ -2,7 +2,7 @@
 
 Bienvenue dans Tetris !
 
-Pour compiler le projet, il suffit d'utiliser la commande make. L'exécutable crée aura le nom tetris.
+Pour compiler le projet, il suffit d'utiliser la commande make. L'exécutable créé aura le nom tetris.
 
 Le jeu commence directement avec une grille vide. Une pièce a été choisie au hasard et vous devez en choisir l'orientation ainsi que la colonne. C'est la gauche de la pièce qui sera placée dans cette colonne. 
 Si la pièce dépasse du haut de la grille, vous avez perdu.
