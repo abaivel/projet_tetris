@@ -50,9 +50,9 @@ int main(){
 	int num_piece;
 	double inter;
 	int score=0;
-	int max_time;
+	float max_time;
 	do{
-		int max_time=emptyLine(grille);
+		max_time=howMuchTime(grille);
 		printf("Voici votre grille :\n");
 		show(grille,colors);
 		num_piece=rand()%NB_PIECES;
@@ -66,7 +66,7 @@ int main(){
 				printf("Choisir l'orientation de la piece :\n");
 				scanf("%d",&orient);
 			}while(orient<1 || orient>chosen_piece.nb_orient);
-		}else{//La piece étant le cube, il n'y a qu'une seule orientation possible
+		}else{//La piece Ã©tant le cube, il n'y a qu'une seule orientation possible
 			printf("Voici la piece a placer :\n");
 			showPiece(chosen_piece,1);
 		}
