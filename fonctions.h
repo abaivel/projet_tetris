@@ -16,7 +16,6 @@ void createPiece(Piece* pieces);
 void saveScore(int score, char pseudo[]);
 void showPiece(Piece piece, int orient);
 void showPieceOrient(Piece piece);
-void showPieceOrien(Piece piece, int orient);
 void recup_Scores();
 char getChar();
 int remove_line(char** grille);

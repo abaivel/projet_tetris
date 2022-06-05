@@ -10,7 +10,6 @@
 
 int main(){
 	srand(time(NULL));
-	//printf("\033[40m");
 	Piece* pieces=malloc(NB_PIECES*sizeof(Piece));
 	if (pieces==NULL){
 		printf("Erreur");
@@ -22,7 +21,7 @@ int main(){
 		printf("Erreur");
 		exit(1);
 	}
-	int** colors=malloc(TAILLE*sizeof(char*));
+	int** colors=malloc(TAILLE*sizeof(char*));//store the color of the piece
 	if (colors==NULL){
 		printf("Erreur");
 		exit(1);
@@ -52,13 +51,13 @@ int main(){
 	int score=0;
 	float max_time;
 	do{
-		max_time=howMuchTime(grille);
+		max_time=howMuchTime(grille);//How much time the user gonna have to choose
 		printf("Voici votre grille :\n");
 		show(grille,colors);
 		num_piece=rand()%NB_PIECES;
 		Piece chosen_piece=pieces[num_piece];
 		time_t tv = time( NULL );
-		if (num_piece != 1){//si la piece n'est pas le cube
+		if (num_piece != 1){//if the piece is not the cube
 			printf("Orientation possible de la piece :\n");
 			showPieceOrient(chosen_piece);
 			//time_t tv = time( NULL );
@@ -67,7 +66,7 @@ int main(){
 				scanf("%d",&orient);
 				clear_scan();
 			}while(orient<1 || orient>chosen_piece.nb_orient);
-		}else{//La piece étant le cube, il n'y a qu'une seule orientation possible
+		}else{//The piece is the cube so there are only one possible orientation
 			printf("Voici la piece a placer :\n");
 			orient=1;
 			showPiece(chosen_piece,1);

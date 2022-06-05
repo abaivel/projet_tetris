@@ -17,12 +17,12 @@ void clear_scan(){
 	}while (c!='\n');
 }
 
-float howMuchTime(char** grille){
+float howMuchTime(char** board){
 	int nb=0,a;
 	for (int i=0;i<TAILLE;i++){
 		a=0;
 		for (int j=0;j<TAILLE;j++){
-			if (grille[i][j]=='@'){
+			if (board[i][j]=='@'){
 				a++;
 			}
 		}if (a<TAILLE/2){
@@ -105,7 +105,7 @@ void showPiece(Piece piece, int orient){
 	}
 }
 
-void show(char** grille, int** colors){
+void show(char** board, int** colors){
 	int i,l;
 	char a;
 	for (a='A';a<='J';a++){
@@ -116,7 +116,7 @@ void show(char** grille, int** colors){
 		for (l=0;l<TAILLE;l++){
 			printf("|");
 			printf("\033[%dm",colors[i][l]);
-			printf("%c", grille[i][l]);
+			printf("%c", board[i][l]);
 			printf("\033[0m");
 		}
 		printf("|\n");
@@ -205,6 +205,7 @@ void createPiece(Piece* pieces){
 			//Tous ces if servent à faire les pieces Z et S
 		}
 	}
+	//number of orientation of the pieces
 	pieces[0].nb_orient=2;
 	pieces[1].nb_orient=1;
 	pieces[2].nb_orient=4;
@@ -212,6 +213,7 @@ void createPiece(Piece* pieces){
 	pieces[4].nb_orient=4;
 	pieces[5].nb_orient=2;
 	pieces[6].nb_orient=2;
+	//Color of the pieces
 	pieces[0].color=36;
 	pieces[1].color=33;
 	pieces[2].color=35;
@@ -219,47 +221,6 @@ void createPiece(Piece* pieces){
 	pieces[4].color=34;
 	pieces[5].color=31;
 	pieces[6].color=32;
-	//nb d'orientation de chaque pièce
-}
-
-void createPieces(Piece* pieces){
-    char line2[2]={'@','@'};
-    char line3[3]={'@','@','@'};
-    char line3_110[3]={'@','@',' '};
-    char line3_011[3]={' ','@','@'};
-    char line_3empty[3]={' ',' ',' '};
-    char line4[4]={'@','@','@','@'};
-    pieces[0].form[0]=line4;
-	pieces[1].form[0]=line2;
-	pieces[1].form[1]=line2;
-	pieces[2].form[0]=line3;
-	pieces[2].form[1]=line_3empty;
-	pieces[2].form[1][1]='@';
-	pieces[3].form[0]=line3;
-	pieces[3].form[1]=line_3empty;
-	pieces[3].form[1][0]='@';
-	pieces[4].form[0]=line3;
-	pieces[4].form[1]=line_3empty;
-	pieces[4].form[1][2]='@';
-	pieces[5].form[0]=line3_110;
-	pieces[5].form[1]=line3_011;
-	pieces[6].form[1]=line3_110;
-	pieces[6].form[0]=line3_011;
-	pieces[0].nb_orient=2;
-	pieces[1].nb_orient=1;
-	pieces[2].nb_orient=4;
-	pieces[3].nb_orient=4;
-	pieces[4].nb_orient=4;
-	pieces[5].nb_orient=2;
-	pieces[6].nb_orient=2;
-	pieces[0].color=36;
-	pieces[1].color=33;
-	pieces[2].color=35;
-	pieces[3].color=37;
-	pieces[4].color=34;
-	pieces[5].color=31;
-	pieces[6].color=32;
-	//nb d'orientation de chaque pièce
 }
 
 void saveScore(int score, char pseudo[]){
@@ -327,32 +288,31 @@ char getChar(){
 	return c;
 }
 
-int remove_line(char** grille){
+int remove_line(char** board){
 	int line[TAILLE]={0};
-	int k=completeLigne(grille,line);
+	int k=completeLigne(board,line);
 	int y,p,t = 0;
 	for (y=0;y<k;y++){
 		for (p=0;p<TAILLE;p++){
-			grille[line[y]][p]=' ';//vidage de la ligne
+			board[line[y]][p]=' ';//make the line empty
 		}
 		for (t=line[y]-1;t>=0;t--){
-			//échange des lignes
-			char* temp=grille[t+1];
-			grille[t+1]=grille[t];
-			grille[t]=temp;
+			char* temp=board[t+1];
+			board[t+1]=board[t];
+			board[t]=temp;
 		}
 	}return k;
 }
 
-int completeLigne(char** grille, int line[TAILLE]){
+int completeLigne(char** board, int line[TAILLE]){
 	int i,j,k=0,s;
 	for (i=0;i<TAILLE;i++){
 		s=0;
 		for (j=0;j<TAILLE;j++){
-			if (grille[i][j]=='@'){
+			if (board[i][j]=='@'){
 				s++;
 			}
-		}if (s==TAILLE){
+		}if (s==TAILLE){//The line is full
 			line[k]=i;
 			k++;
 		}
@@ -360,10 +320,10 @@ int completeLigne(char** grille, int line[TAILLE]){
 }
 
 Piece create_orientPiece(Piece piece, int orient){
-	Piece piece_orient; //nouvelle pièce pour prendre en compte l'orientation choisie de la pièce
+	Piece piece_orient; //new oriented piece
 	switch (orient)
 	{
-	case 1: //forme de base
+	case 1: //normal orientation
 		piece_orient.form=malloc(piece.sizeLC[0]*sizeof(char*));
 		if (piece_orient.form==NULL){
 			exit(1);
@@ -379,9 +339,8 @@ Piece create_orientPiece(Piece piece, int orient){
 		}
 		piece_orient.sizeLC[0]=piece.sizeLC[0];
 		piece_orient.sizeLC[1]=piece.sizeLC[1];
-		//piece_orient=piece vu que la pièce n'est pas tourné
 	break;
-		case 2://forme tourné vers la droite de 90°
+		case 2://piece rotates to the right by 90°
 			piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
 			if (piece_orient.form==NULL){
 				exit(1);
@@ -398,7 +357,7 @@ Piece create_orientPiece(Piece piece, int orient){
 			piece_orient.sizeLC[0]=piece.sizeLC[1];
 			piece_orient.sizeLC[1]=piece.sizeLC[0];
 			break;
-		case 3://forme tourné vers la droite de 180°
+		case 3://piece rotates to the right by 180°
 			piece_orient.form=malloc(piece.sizeLC[0]*sizeof(char*));
 			if (piece_orient.form==NULL){
 				exit(1);
@@ -417,7 +376,7 @@ Piece create_orientPiece(Piece piece, int orient){
 			piece_orient.sizeLC[0]=piece.sizeLC[0];
 			piece_orient.sizeLC[1]=piece.sizeLC[1];
 			break;
-		case 4://forme tourné vers la gauche de 90°
+		case 4://piece rotates to the left by 90°
 			piece_orient.form=malloc(piece.sizeLC[1]*sizeof(char*));
 			if (piece_orient.form==NULL){
 				exit(1);
@@ -443,25 +402,25 @@ Piece create_orientPiece(Piece piece, int orient){
 	return piece_orient;
 }
 
-int collisions(char** grille, int** colors, Piece piece, int column, int orient){
+int collisions(char** board, int** colors, Piece piece, int column, int orient){
 	int i=0,j;
 	Piece piece_orient=create_orientPiece(piece, orient);
 	for (int k=0;k<piece_orient.sizeLC[1];k++){
 		for (int p=0;p<piece_orient.sizeLC[0];p++){
-			if (grille[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
+			if (board[p][k+column]=='@'&& piece_orient.form[p][k]=='@'){
 				for (int r=0;r<piece_orient.sizeLC[0];r++){
 					free(piece_orient.form[r]);
 				}
 				free(piece_orient.form);
-				return 1; //Si la pièce dépasse la grille par le haut
+				return 1; //If the piece doesn't fit in the board
 			}
 		}
 	}
 	int touche=0;
-	while (i<TAILLE-piece_orient.sizeLC[0]+1 && touche==0){ //Tant que la pièce n'est pas arrivée en bas de la grille et qu'elle peut encore descendre
+	while (i<TAILLE-piece_orient.sizeLC[0]+1 && touche==0){ //While the piece is not arrive at the bottom and that it can still go down
 		for (int k=0;k<piece_orient.sizeLC[0];k++){
 			for (j=0;j<piece_orient.sizeLC[1];j++){
-				if (grille[i+k][j+column]=='@' && piece_orient.form[k][j]=='@'){
+				if (board[i+k][j+column]=='@' && piece_orient.form[k][j]=='@'){
 					touche=1;
 				}
 			}
@@ -469,11 +428,10 @@ int collisions(char** grille, int** colors, Piece piece, int column, int orient)
 		i++;
 	}
 	i-=touche;
-	//i+=piece_orient.sizeLC[0]-2;
 	for (int m=0;m<piece_orient.sizeLC[0];m++){
 		for (int n=0;n<piece_orient.sizeLC[1];n++){
 			if (piece_orient.form[m][n]=='@'){
-				grille[i+m-1][column+n]='@';//Placement de la pièce
+				board[i+m-1][column+n]='@';//The piece is placed
 				colors[i+m-1][column+n]=piece.color;
 			}
 		}
