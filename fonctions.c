@@ -68,43 +68,6 @@ void showPieceOrient(Piece piece){
 	}
 }
 
-void showPieceOrien(Piece piece, int orient){
-	switch (orient)
-	{
-		case 1: //forme de base
-			for (int i=0;i<piece.sizeLC[0];i++){
-				for (int j=0;j<piece.sizeLC[1];j++){
-					printf("%c ",piece.form[i][j]);
-				}printf("\n");
-			}
-			break;
-		case 2://forme tourné vers la droite de 90°
-			for (int i=0;i<piece.sizeLC[1];i++){
-				for (int j=0;j<piece.sizeLC[0];j++){
-					printf("%c ",piece.form[piece.sizeLC[0]-1-j][i]);
-				}printf("\n");
-			}
-			break;
-		case 3://forme tourné vers la droite de 180°
-			for (int i=0;i<piece.sizeLC[0];i++){
-				for (int j=0;j<piece.sizeLC[1];j++){
-					printf("%c ",piece.form[piece.sizeLC[0]-1-i][piece.sizeLC[1]-1-j]);
-				}printf("\n");
-			}
-			break;
-		case 4://forme tourné vers la gauche de 90°
-			for (int i=0;i<piece.sizeLC[1];i++){
-				for (int j=0;j<piece.sizeLC[0];j++){
-					printf("%c ",piece.form[j][piece.sizeLC[1]-1-i]);
-				}printf("\n");
-			}
-			break;
-		default:
-			printf("Erreur");
-			exit(1);
-	}
-}
-
 void showPiece(Piece piece, int orient){
 	switch (orient)
 	{
