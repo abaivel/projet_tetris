@@ -8,6 +8,7 @@ typedef struct {
 }Piece;
 
 void title();
+void clear_scan();
 float howMuchTime(char** grille);
 void show(char** grille, int** colors);
 Piece create_orientPiece(Piece piece, int orient);

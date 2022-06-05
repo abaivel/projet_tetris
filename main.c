@@ -65,9 +65,11 @@ int main(){
 			do{
 				printf("Choisir l'orientation de la piece :\n");
 				scanf("%d",&orient);
+				clear_scan();
 			}while(orient<1 || orient>chosen_piece.nb_orient);
 		}else{//La piece étant le cube, il n'y a qu'une seule orientation possible
 			printf("Voici la piece a placer :\n");
+			orient=1;
 			showPiece(chosen_piece,1);
 		}
 		do{
